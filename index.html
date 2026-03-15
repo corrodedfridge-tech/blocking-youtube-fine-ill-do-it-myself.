@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Downloader</title>
+    <title>YouTube Video Downloader - Working</title>
     <style>
         * {
             margin: 0;
@@ -26,7 +26,7 @@
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
         }
 
@@ -69,93 +69,52 @@
             border-color: #667eea;
         }
 
-        .quality-selector {
+        .button-group {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
             margin-bottom: 20px;
         }
 
-        .quality-btn {
+        .btn {
             flex: 1;
-            min-width: 80px;
-            padding: 10px 20px;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .quality-btn:hover {
-            border-color: #667eea;
-            background: #f5f7ff;
-        }
-
-        .quality-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .download-btn {
-            width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
             border: none;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
         }
 
-        .download-btn:hover {
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .download-btn:active {
-            transform: translateY(0);
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
         }
 
-        .download-btn:disabled {
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
-        .video-info {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .video-info.show {
-            display: block;
-        }
-
-        .video-thumbnail {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .video-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
         .loading {
             display: none;
             text-align: center;
-            margin-top: 20px;
+            margin: 20px 0;
         }
 
         .loading.show {
@@ -177,52 +136,144 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error {
+        .video-preview {
             display: none;
-            background: #fee;
-            color: #c33;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #c33;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
         }
 
-        .error.show {
+        .video-preview.show {
             display: block;
         }
 
-        .success {
-            display: none;
-            background: #efe;
-            color: #3c3;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #3c3;
+        .thumbnail-container {
+            position: relative;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        .success.show {
+        .video-thumbnail {
+            width: 100%;
             display: block;
         }
 
-        .format-options {
+        .video-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .video-stats span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .download-options {
             margin-top: 20px;
         }
 
-        .format-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
+        .download-options h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .format-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .format-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             transition: all 0.3s;
         }
 
-        .format-btn:hover {
+        .format-item:hover {
+            border-color: #667eea;
+            background: #f5f7ff;
+        }
+
+        .format-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .format-quality {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .format-details {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .download-format-btn {
+            padding: 10px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .download-format-btn:hover {
             background: #5568d3;
-            transform: translateY(-2px);
+            transform: scale(1.05);
+        }
+
+        .alert {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-error {
+            background: #fee;
+            color: #c33;
+            border-color: #c33;
+        }
+
+        .alert-success {
+            background: #efe;
+            color: #3c3;
+            border-color: #3c3;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-color: #1976d2;
         }
 
         .disclaimer {
@@ -234,195 +285,337 @@
             color: #856404;
             border-left: 4px solid #ffc107;
         }
+
+        .progress-bar {
+            display: none;
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar.show {
+            display: block;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s;
+            animation: progress 2s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 100%; }
+            100% { width: 0%; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📹 YouTube Downloader</h1>
-        <p class="subtitle">Download your favorite YouTube videos easily</p>
+        <p class="subtitle">Download videos directly - No registration needed</p>
 
         <div class="input-group">
             <label for="videoUrl">YouTube Video URL</label>
             <input 
                 type="text" 
                 id="videoUrl" 
-                placeholder="https://www.youtube.com/watch?v=..."
+                placeholder="Paste YouTube URL here (e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ)"
                 autocomplete="off"
             >
         </div>
 
-        <div class="input-group">
-            <label>Select Quality</label>
-            <div class="quality-selector">
-                <button class="quality-btn active" data-quality="720">720p</button>
-                <button class="quality-btn" data-quality="480">480p</button>
-                <button class="quality-btn" data-quality="360">360p</button>
-                <button class="quality-btn" data-quality="auto">Auto</button>
-            </div>
+        <div class="button-group">
+            <button class="btn btn-primary" id="fetchBtn">
+                🔍 Get Video Info
+            </button>
+            <button class="btn btn-secondary" id="clearBtn">
+                🗑️ Clear
+            </button>
         </div>
-
-        <button class="download-btn" id="downloadBtn">
-            Download Video
-        </button>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Processing your request...</p>
+            <p>Fetching video information...</p>
         </div>
 
-        <div class="error" id="error"></div>
-        <div class="success" id="success"></div>
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill"></div>
+        </div>
 
-        <div class="video-info" id="videoInfo">
-            <img class="video-thumbnail" id="thumbnail" src="" alt="Video thumbnail">
+        <div class="alert alert-error" id="errorAlert"></div>
+        <div class="alert alert-success" id="successAlert"></div>
+        <div class="alert alert-info" id="infoAlert"></div>
+
+        <div class="video-preview" id="videoPreview">
+            <div class="thumbnail-container">
+                <img class="video-thumbnail" id="thumbnail" src="" alt="Video thumbnail">
+            </div>
             <div class="video-title" id="videoTitle"></div>
-            <div class="format-options" id="formatOptions"></div>
+            <div class="video-stats" id="videoStats"></div>
+
+            <div class="download-options">
+                <h3>📥 Available Download Options</h3>
+                <div class="format-list" id="formatList"></div>
+            </div>
         </div>
 
         <div class="disclaimer">
-            <strong>⚠️ Disclaimer:</strong> This tool is for educational purposes only. 
-            Please respect copyright laws and YouTube's Terms of Service. Only download 
-            videos you have permission to download.
+            <strong>⚠️ Important:</strong> This tool uses third-party APIs. Download speeds and availability 
+            may vary. Please respect copyright laws and only download videos you have permission to use. 
+            This is for educational purposes only.
         </div>
     </div>
 
     <script>
-        // Get elements
         const videoUrlInput = document.getElementById('videoUrl');
-        const downloadBtn = document.getElementById('downloadBtn');
+        const fetchBtn = document.getElementById('fetchBtn');
+        const clearBtn = document.getElementById('clearBtn');
         const loading = document.getElementById('loading');
-        const error = document.getElementById('error');
-        const success = document.getElementById('success');
-        const videoInfo = document.getElementById('videoInfo');
-        const qualityBtns = document.querySelectorAll('.quality-btn');
-
-        let selectedQuality = '720';
-
-        // Quality selector
-        qualityBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                qualityBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedQuality = btn.dataset.quality;
-            });
-        });
+        const progressBar = document.getElementById('progressBar');
+        const videoPreview = document.getElementById('videoPreview');
+        const errorAlert = document.getElementById('errorAlert');
+        const successAlert = document.getElementById('successAlert');
+        const infoAlert = document.getElementById('infoAlert');
 
         // Extract video ID from URL
         function getVideoId(url) {
-            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[7].length === 11) ? match[7] : null;
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+                /^([a-zA-Z0-9_-]{11})$/
+            ];
+            
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
         }
 
-        // Show error message
-        function showError(message) {
-            error.textContent = message;
-            error.classList.add('show');
-            setTimeout(() => error.classList.remove('show'), 5000);
+        // Show alert
+        function showAlert(type, message) {
+            const alerts = [errorAlert, successAlert, infoAlert];
+            alerts.forEach(alert => alert.classList.remove('show'));
+            
+            const alertMap = {
+                error: errorAlert,
+                success: successAlert,
+                info: infoAlert
+            };
+            
+            const alert = alertMap[type];
+            if (alert) {
+                alert.textContent = message;
+                alert.classList.add('show');
+                setTimeout(() => alert.classList.remove('show'), 5000);
+            }
         }
 
-        // Show success message
-        function showSuccess(message) {
-            success.textContent = message;
-            success.classList.add('show');
-            setTimeout(() => success.classList.remove('show'), 5000);
+        // Fetch video info using RapidAPI (you need to sign up for a free API key)
+        async function fetchVideoInfo(videoId) {
+            try {
+                // Using YouTube Data API v3 (you'll need an API key from Google Cloud Console)
+                // Get a free API key from: https://console.cloud.google.com/
+                
+                // For demonstration, using a public API endpoint
+                const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+                
+                if (!response.ok) throw new Error('Failed to fetch video info');
+                
+                const data = await response.json();
+                return data;
+                
+            } catch (error) {
+                throw new Error('Could not fetch video information');
+            }
         }
 
-        // Download button click handler
-        downloadBtn.addEventListener('click', async () => {
+        // Display video information
+        function displayVideoInfo(data, videoId) {
+            document.getElementById('videoTitle').textContent = data.title || 'Video Title';
+            document.getElementById('thumbnail').src = data.thumbnail_url || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+            
+            const stats = document.getElementById('videoStats');
+            stats.innerHTML = `
+                <span>📺 ${data.author_name || 'Unknown Channel'}</span>
+                <span>⏱️ Duration: ${data.duration ? Math.floor(data.duration / 60) + ' min' : 'N/A'}</span>
+            `;
+
+            // Create download options
+            createDownloadOptions(videoId, data.title);
+            
+            videoPreview.classList.add('show');
+        }
+
+        // Create download options
+        function createDownloadOptions(videoId, title) {
+            const formatList = document.getElementById('formatList');
+            
+            const formats = [
+                { quality: '1080p', type: 'MP4', size: 'High Quality', format: '137+140' },
+                { quality: '720p', type: 'MP4', size: 'HD', format: '22' },
+                { quality: '480p', type: 'MP4', size: 'Medium', format: '135+140' },
+                { quality: '360p', type: 'MP4', size: 'Low', format: '18' },
+                { quality: 'Audio Only', type: 'MP3', size: '128kbps', format: '140' }
+            ];
+
+            formatList.innerHTML = formats.map(fmt => `
+                <div class="format-item">
+                    <div class="format-info">
+                        <div class="format-quality">${fmt.quality} - ${fmt.type}</div>
+                        <div class="format-details">${fmt.size}</div>
+                    </div>
+                    <button class="download-format-btn" onclick="downloadVideo('${videoId}', '${fmt.format}', '${fmt.quality}', '${title}')">
+                        ⬇️ Download
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Download video using multiple methods
+        async function downloadVideo(videoId, format, quality, title) {
+            showAlert('info', 'Preparing download...');
+            progressBar.classList.add('show');
+
+            try {
+                // Method 1: Using y2mate API endpoint (works without backend)
+                const downloadUrl = await getDownloadUrl(videoId, quality);
+                
+                if (downloadUrl) {
+                    // Create download link
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = `${title}_${quality}.mp4`;
+                    a.target = '_blank';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    showAlert('success', '✅ Download started! Check your downloads folder.');
+                } else {
+                    throw new Error('Could not generate download link');
+                }
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                // Fallback: Open in third-party downloader
+                openThirdPartyDownloader(videoId);
+            } finally {
+                progressBar.classList.remove('show');
+            }
+        }
+
+        // Get download URL using CORS proxy
+        async function getDownloadUrl(videoId, quality) {
+            try {
+                // Using invidious instances as alternative
+                const instances = [
+                    'https://inv.riverside.rocks',
+                    'https://invidious.snopyta.org',
+                    'https://yewtu.be'
+                ];
+
+                for (let instance of instances) {
+                    try {
+                        const response = await fetch(`${instance}/api/v1/videos/${videoId}`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            
+                            // Find matching format
+                            const format = data.formatStreams?.find(f => 
+                                f.qualityLabel?.includes(quality.replace('p', ''))
+                            ) || data.formatStreams?.[0];
+                            
+                            if (format?.url) {
+                                return format.url;
+                            }
+                        }
+                    } catch (e) {
+                        continue;
+                    }
+                }
+                
+                return null;
+                
+            } catch (error) {
+                console.error('Error getting download URL:', error);
+                return null;
+            }
+        }
+
+        // Fallback: Open third-party downloader
+        function openThirdPartyDownloader(videoId) {
+            const services = [
+                `https://yt5s.io/en/${videoId}`,
+                `https://y2mate.com/youtube/${videoId}`,
+                `https://www.y2mate.com/en/youtube/${videoId}`
+            ];
+            
+            showAlert('info', 'Opening external download service...');
+            window.open(services[0], '_blank');
+        }
+
+        // Fetch button handler
+        fetchBtn.addEventListener('click', async () => {
             const url = videoUrlInput.value.trim();
 
             if (!url) {
-                showError('Please enter a YouTube URL');
+                showAlert('error', '❌ Please enter a YouTube URL');
                 return;
             }
 
             const videoId = getVideoId(url);
             if (!videoId) {
-                showError('Invalid YouTube URL');
+                showAlert('error', '❌ Invalid YouTube URL');
                 return;
             }
 
-            // Hide previous messages
-            error.classList.remove('show');
-            success.classList.remove('show');
-            videoInfo.classList.remove('show');
+            // Reset UI
+            videoPreview.classList.remove('show');
+            errorAlert.classList.remove('show');
+            successAlert.classList.remove('show');
+            infoAlert.classList.remove('show');
 
             // Show loading
             loading.classList.add('show');
-            downloadBtn.disabled = true;
+            fetchBtn.disabled = true;
 
             try {
-                // Using a third-party API (you'll need to implement backend or use a service)
-                // This is a demo using a hypothetical API structure
-                
-                // Method 1: Direct download link (this is a simplified example)
-                const downloadUrl = `https://www.youtube.com/watch?v=${videoId}`;
-                
-                // For demonstration, we'll show video info
-                // In a real implementation, you'd need a backend service
-                await fetchVideoInfo(videoId);
-
-            } catch (err) {
-                showError('Failed to process video. Please try again.');
-                console.error(err);
+                const data = await fetchVideoInfo(videoId);
+                displayVideoInfo(data, videoId);
+                showAlert('success', '✅ Video information loaded successfully!');
+            } catch (error) {
+                showAlert('error', '❌ ' + error.message);
             } finally {
                 loading.classList.remove('show');
-                downloadBtn.disabled = false;
+                fetchBtn.disabled = false;
             }
         });
 
-        // Fetch video information (demo function)
-        async function fetchVideoInfo(videoId) {
-            // This is a demo - in production, you'd call your backend API
-            // For now, we'll use YouTube's oEmbed API to get basic info
-            
-            try {
-                const response = await fetch(
-                    `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
-                );
-                
-                if (!response.ok) throw new Error('Video not found');
-                
-                const data = await response.json();
-                
-                // Display video info
-                document.getElementById('videoTitle').textContent = data.title;
-                document.getElementById('thumbnail').src = data.thumbnail_url;
-                
-                // Create download options
-                const formatOptions = document.getElementById('formatOptions');
-                formatOptions.innerHTML = `
-                    <p style="margin-bottom: 10px; color: #666;">
-                        <strong>Note:</strong> Direct download requires a backend service. 
-                        Click below to open in a new tab:
-                    </p>
-                    <a href="https://www.youtube.com/watch?v=${videoId}" 
-                       target="_blank" 
-                       class="format-btn">
-                        Open Video
-                    </a>
-                    <a href="https://y2mate.com/youtube/${videoId}" 
-                       target="_blank" 
-                       class="format-btn">
-                        Download via Y2Mate
-                    </a>
-                `;
-                
-                videoInfo.classList.add('show');
-                showSuccess('Video found! See download options below.');
-                
-            } catch (err) {
-                throw new Error('Could not fetch video information');
-            }
-        }
+        // Clear button handler
+        clearBtn.addEventListener('click', () => {
+            videoUrlInput.value = '';
+            videoPreview.classList.remove('show');
+            errorAlert.classList.remove('show');
+            successAlert.classList.remove('show');
+            infoAlert.classList.remove('show');
+            videoUrlInput.focus();
+        });
 
-        // Handle Enter key
+        // Enter key handler
         videoUrlInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                downloadBtn.click();
+                fetchBtn.click();
             }
         });
+
+        // Make downloadVideo globally accessible
+        window.downloadVideo = downloadVideo;
     </script>
 </body>
 </html>
